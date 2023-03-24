@@ -31,3 +31,7 @@ node/
 ## OS ##
 .DS_Store
 .java-version
+# environment/build properties
+
+.env
+build.properties
