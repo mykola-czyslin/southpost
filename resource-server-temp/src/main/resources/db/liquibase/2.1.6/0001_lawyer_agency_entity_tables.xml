@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+	<changeSet id="2.1.6-0001-01.01.01" author="Mykola Chyslin">
+		<comment>Create table `lawyer_agency`</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		CREATE TABLE `lawyer_agency` (
+			ID                     SERIAL,
+			DISPLAY_NAME           VARCHAR(250) NOT NULL,
+			SEARCH_VALUE           VARCHAR(250) NOT NULL,
+			WEB_SITE               VARCHAR(250) NOT NULL,
+			SETTLEMENT_ID          BIGINT UNSIGNED NOT NULL,
+			LOCATION_ID            BIGINT UNSIGNED NULL,
+			MODIFICATION_TIME      DATETIME NOT NULL,
+			MODIFIED_BY_USER_ID    BIGINT UNSIGNED NOT NULL,
+			CONSTRAINT `lawyer_agency_p` PRIMARY KEY(ID),
+			CONSTRAINT `lawyer_agency_u` UNIQUE(SEARCH_VALUE),
+			CONSTRAINT `lawyer_agency_search_uc` CHECK(SEARCH_VALUE = UPPER(DISPLAY_NAME)),
+			CONSTRAINT `lawyer_agency_settlement_f` FOREIGN KEY(SETTLEMENT_ID)
+				REFERENCES `address_settlement` (ID),
+			CONSTRAINT `lawyer_location_f` FOREIGN KEY (LOCATION_ID)
+				REFERENCES `address_location` (ID),
+			CONSTRAINT `lawyer_agency_modified_user_f` FOREIGN KEY(MODIFIED_BY_USER_ID)
+				REFERENCES `user` (ID)
+		) ENGINE = INNODB
+		 CHARACTER SET utf8
+		 COLLATE utf8_unicode_ci;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DROP TABLE `lawyer_agency` CASCADE;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.6-0001-01.01.02" author="Mykola Chyslin">
+		<comment>Create `lawyer_agency_cases` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		CREATE TABLE `lawyer_agency_cases` (
+			AGENCY_ID               BIGINT UNSIGNED NOT NULL,
+			CASE_ID                 ENUM('CIVIL', 'ADMINISTRATIVE', 'CRIMINAL', 'PROPERTY', 'FAMILY') NOT NULL,
+			CONSTRAINT `lawyer_agency_cases_p` PRIMARY KEY (AGENCY_ID, CASE_ID),
+			CONSTRAINT `lawyer_agency_cases_agency_f` FOREIGN KEY (AGENCY_ID)
+				REFERENCES `lawyer_agency` (ID)
+				ON DELETE CASCADE
+		) ENGINE = INNODB
+		CHARACTER SET utf8
+		COLLATE utf8_unicode_ci;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DROP TABLE `lawyer_agency_service` CASCADE;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.6-0001-01.01.03" author="Mykola Chyslin">
+		<comment>Create `lawyer_agency_phones` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		CREATE TABLE `lawyer_agency_phones` (
+			PHONE_ID          BIGINT UNSIGNED NOT NULL,
+			AGENCY_ID         BIGINT UNSIGNED NOT NULL,
+			ORDINAL_INDEX     INT UNSIGNED NOT NULL,
+			CONSTRAINT `lawyer_agency_phones_p` PRIMARY KEY(PHONE_ID, AGENCY_ID),
+			CONSTRAINT `lawyer_agency_phones_u` UNIQUE(AGENCY_ID,ORDINAL_INDEX),
+			CONSTRAINT `lawyer_agency_phones_phone_f` FOREIGN KEY (PHONE_ID)
+				REFERENCES `phone` (ID) ON DELETE CASCADE,
+			CONSTRAINT `lawyer_agency_phones_agency_f` FOREIGN KEY (AGENCY_ID)
+				REFERENCES `lawyer_agency`(ID) ON DELETE CASCADE
+		) ENGINE = INNODB
+		CHARACTER SET utf8
+		COLLATE utf8_unicode_ci;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DROP TABLE `lawyer_agency_phones` CASCADE;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.6-0001-01.01.04" author="Mykola Chyslin">
+		<comment>Create `lawyer_agency_emails` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		CREATE TABLE `lawyer_agency_emails` (
+			EMAIL_ADDRESS_ID          BIGINT UNSIGNED NOT NULL,
+			AGENCY_ID                 BIGINT UNSIGNED NOT NULL,
+			ORDINAL_INDEX             INT UNSIGNED NOT NULL,
+			CONSTRAINT `lawyer_agency_emails_p` PRIMARY KEY(EMAIL_ADDRESS_ID, AGENCY_ID),
+			CONSTRAINT `lawyer_agency_emails_u` UNIQUE(AGENCY_ID, ORDINAL_INDEX),
+			CONSTRAINT `lawyer_agency_emails_email_address_f` FOREIGN KEY (EMAIL_ADDRESS_ID)
+				REFERENCES `email_address` (ID) ON DELETE CASCADE,
+			CONSTRAINT `lawyer_agency_emails_lawyer_agency_f` FOREIGN KEY (AGENCY_ID)
+				REFERENCES `lawyer_agency`(ID) ON DELETE CASCADE
+		) ENGINE = INNODB
+		CHARACTER SET utf8
+		COLLATE utf8_unicode_ci;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DROP TABLE `lawyer_agency_emails` CASCADE;
+]]></sql>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

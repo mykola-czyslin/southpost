@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+				   logicalFilePath="what_where_liquibase_path">
+
+	<changeSet id="0004.0001_create_clinic_table" author="Mykola Chyslin">
+		<comment>Create table `clinic`</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			CREATE TABLE `clinic` (
+				ID 						SERIAL,
+				DISPLAY_NAME			VARCHAR(80) CHARSET UTF8 COLLATE utf8_unicode_ci NOT NULL,
+				SEARCH_NAME				VARCHAR(80) CHARSET UTF8 COLLATE utf8_unicode_ci NOT NULL,
+				CLINIC_TYPE 			ENUM('AMBULATORY', 'STATIONARY', 'MIXED') NOT NULL,
+				DESCRIPTION 			TEXT CHARSET UTF8 COLLATE utf8_unicode_ci,
+				CONTACT_ID 				BIGINT UNSIGNED NOT NULL,
+				CONSTRAINT `clinic_p` PRIMARY KEY (ID),
+				CONSTRAINT `clinic_search_case` CHECK(SEARCH_NAME = UPPER(SEARCH_NAME)),
+				CONSTRAINT `clinic_display_search_c` CHECK(DISPLAY_NAME = UPPER(SEARCH_NAME)),
+				CONSTRAINT `clinic_u` UNIQUE (SEARCH_NAME),
+				CONSTRAINT `clinic_contact_f` FOREIGN KEY (CONTACT_ID)
+						REFERENCES `contact` (ID),
+				INDEX `clinic_contact_fi` (CONTACT_ID)
+			) ENGINE = INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			DROP TABLE `clinic`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="0004.0001_create_clinic_service_table" author="Mykola Chyslin">
+		<comment>Create table `clinic_service`</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			CREATE TABLE `clinic_service` (
+				CLINIC_ID 					BIGINT UNSIGNED NOT NULL,
+				SERVICE 					ENUM('SURGERY', 'AESTHETIC_SURGERY', 'PROSTHESIS',
+												'ADDICTION_THERAPY', 'PSYCHIATRY', 'GYNECOLOGY',
+												'TRAUMATOLOGY', 'OPHTHALMOLOGY', 'ENDOCRINOLOGY',
+												'GASTROENTEROLOGY', 'UROLOGY', 'PULMONOLOGY',
+												'OTOLARYNGOLOGY', 'NEUROPATHOLOGY', 'GENERAL_THERAPY'),
+				CONSTRAINT `clinic_service_p` PRIMARY KEY (CLINIC_ID, SERVICE),
+				CONSTRAINT `clinic_service_clinic_f` FOREIGN KEY (CLINIC_ID)
+						REFERENCES `clinic` (ID)
+						ON DELETE CASCADE,
+				INDEX `clinic_service_clinic_fi` (CLINIC_ID)
+			) ENGINE = INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			DROP TABLE `clinic_service`;
+]]></sql>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

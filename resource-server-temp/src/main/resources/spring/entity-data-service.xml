@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="phoneEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="phoneRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="phoneInfoMapper"/>
+	</bean>
+
+	<bean id="emailEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="emailAddressRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="emailInfoMapper"/>
+	</bean>
+
+	<bean id="regionEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="regionRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="regionInfoMapper"/>
+	</bean>
+
+	<bean id="districtEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="districtRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="districtInfoMapper"/>
+	</bean>
+
+	<bean id="settlementEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="settlementRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="settlementInfoMapper"/>
+	</bean>
+
+	<bean id="streetEntityDataServices" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="streetRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="streetInfoMapper"/>
+	</bean>
+
+	<bean id="locationEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="locationRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="locationInfoMapper"/>
+	</bean>
+
+	<bean id="employerEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="employerRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="employerInfoMapper"/>
+	</bean>
+
+	<bean id="vacancyEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="vacancyRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="vacancyInfoMapper"/>
+	</bean>
+
+	<bean id="dwellingEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="dwellingRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="dwellingInfoMapper"/>
+	</bean>
+
+	<bean id="clinicEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="clinicRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="clinicInfoMapper"/>
+	</bean>
+
+	<bean id="lawyerAgencyEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="lawyerAgencyRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="lawyerAgencyInfoMapper"/>
+	</bean>
+
+	<bean id="userDetailsEntityDataService" class="entity.service.web.ua.southpost.resource.LocalEntityDataService">
+		<constructor-arg name="repository" ref="userRepository"/>
+		<constructor-arg name="entityInfoMapper" ref="detailedUserInfoMapper"/>
+	</bean>
+</beans>

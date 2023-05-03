@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="abstractEntityGridSettings" abstract="true" class="ua.southpost.resource.commons.service.EntityGridSettingsServiceImpl">
+		<constructor-arg name="recordsPerPageDefault" value="${view.grid.rows.per.page}"/>
+	</bean>
+
+	<bean id="settlementGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="settlementSort"/>
+	</bean>
+
+	<bean id="streetGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="streetSort"/>
+	</bean>
+
+	<bean id="locationGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="locationSort"/>
+	</bean>
+
+	<bean id="phoneGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="phoneSort"/>
+	</bean>
+
+	<bean id="emailGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="emailSort"/>
+	</bean>
+
+	<bean id="contactGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="contactSort"/>
+	</bean>
+
+	<bean id="employerGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="employerSort"/>
+	</bean>
+
+	<bean id="userGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="userSort"/>
+	</bean>
+
+
+	<bean id="vacancyGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="vacancySort"/>
+	</bean>
+
+	<bean id="dwellingGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="dwellingSort"/>
+	</bean>
+
+	<bean id="clinicGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="clinicSort"/>
+	</bean>
+
+	<bean id="lawyerAgencyGridSettings" parent="abstractEntityGridSettings">
+		<constructor-arg name="sortOptionsDefault" ref="lawyerAgencySort"/>
+	</bean>
+
+	<bean id="settlementPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.address.SettlementInfo"/>
+		<constructor-arg name="converter" ref="settlementSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="settlementGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="settlementSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="settlementEntityLookupService"/>
+		<constructor-arg name="listViewName" value="settlement/list"/>
+		<constructor-arg name="listViewScripts" ref="settlementListScripts"/>
+	</bean>
+
+	<bean id="streetPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.address.StreetInfo"/>
+		<constructor-arg name="converter" ref="streetSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="streetGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="streetSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="streetEntityLookupService"/>
+		<constructor-arg name="listViewName" value="street/list"/>
+		<constructor-arg name="listViewScripts" ref="streetsListScripts"/>
+	</bean>
+
+	<bean id="locationPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.address.LocationInfo"/>
+		<constructor-arg name="converter" ref="locationSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="locationGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="locationSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="locationEntityLookupService"/>
+		<constructor-arg name="listViewName" value="location/list"/>
+		<constructor-arg name="listViewScripts" ref="locationListScripts"/>
+	</bean>
+
+	<bean id="phonePageListService" class="ua.southpost.resource.backup.web.controller.service.local.PageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.contact.PhoneInfo"/>
+		<constructor-arg name="converter" ref="phoneSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="phoneGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="phoneSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="phoneEntityLookupService"/>
+		<constructor-arg name="listViewName" value="contact/phone/list"/>
+		<constructor-arg name="listViewScripts" ref="phoneListScripts"/>
+	</bean>
+
+	<bean id="emailPageListService" class="ua.southpost.resource.backup.web.controller.service.local.PageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.contact.EmailInfo"/>
+		<constructor-arg name="converter" ref="emailSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="emailGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="emailSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="emailEntityLookupService"/>
+		<constructor-arg name="listViewName" value="contact/email/list"/>
+		<constructor-arg name="listViewScripts" ref="emailListScripts"/>
+	</bean>
+
+	<bean id="employerPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.employer.EmployerInfo"/>
+		<constructor-arg name="converter" ref="employerSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="employerGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="employerSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="employerEntityLookupService"/>
+		<constructor-arg name="listViewName" value="employer/list"/>
+		<constructor-arg name="listViewScripts" ref="employerListScripts"/>
+	</bean>
+
+	<bean id="userPageListService" class="ua.southpost.resource.backup.web.controller.service.local.PageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.user.DetailedUserInfo"/>
+		<constructor-arg name="converter" ref="userSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="userGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="userSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="userEntityLookupService"/>
+		<constructor-arg name="listViewName" value="users/list"/>
+		<constructor-arg name="listViewScripts" ref="userListScripts"/>
+	</bean>
+
+	<bean id="vacancyPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.vacancy.VacancyInfo"/>
+		<constructor-arg name="converter" ref="vacancySearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="vacancyGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="vacancySearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="vacancyEntityLookupService"/>
+		<constructor-arg name="listViewName" value="vacancy/list"/>
+		<constructor-arg name="listViewScripts" ref="vacancyListScripts"/>
+	</bean>
+
+	<bean id="dwellingPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.dwelling.DwellingInfo"/>
+		<constructor-arg name="converter" ref="dwellingSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="dwellingGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="dwellingSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="dwellingEntityLookupService"/>
+		<constructor-arg name="listViewName" value="dwelling/list"/>
+		<constructor-arg name="listViewScripts" ref="dwellingListScripts"/>
+	</bean>
+
+	<bean id="clinicPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.clinic.ClinicInfo"/>
+		<constructor-arg name="converter" ref="clinicSearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="clinicGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="clinicSearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="clinicEntityLookupService"/>
+		<constructor-arg name="listViewName" value="clinic/list"/>
+		<constructor-arg name="listViewScripts" ref="clinicListScripts"/>
+	</bean>
+
+	<bean id="lawyerAgencyPageListService" class="ua.southpost.resource.backup.web.controller.service.local.RegionalPageListServiceImpl">
+		<constructor-arg name="entityType" value="ua.southpost.resource.backup.web.model.dto.lawyer.LawyerAgencyInfo"/>
+		<constructor-arg name="converter" ref="lawyerAgencySearchFormToPayloadConverter"/>
+		<constructor-arg name="gridSettingsService" ref="lawyerAgencyGridSettings"/>
+		<constructor-arg name="searchFormFactory" ref="lawyerAgencySearchFormFactory"/>
+		<constructor-arg name="lookupService" ref="lawyerAgencyEntityLookupService"/>
+		<constructor-arg name="listViewName" value="lawyer/list"/>
+		<constructor-arg name="listViewScripts" ref="lawyerListScripts"/>
+	</bean>
+
+	<util:map id="entityTypeMap" key-type="java.lang.Class" value-type="java.lang.Class" map-class="java.util.concurrent.ConcurrentHashMap">
+		<entry key="ua.southpost.resource.backup.web.security.UserInfo" value="ua.southpost.resource.backup.data.model.User"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.user.DetailedUserInfo" value="ua.southpost.resource.backup.data.model.User"/>
+		<entry key="ua.southpost.resource.commons.model.dto.BriefUserInfo" value="ua.southpost.resource.backup.data.model.User"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.address.RegionInfo" value="ua.southpost.resource.backup.data.model.Region"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.address.DistrictInfo" value="ua.southpost.resource.backup.data.model.District"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.address.SettlementInfo" value="ua.southpost.resource.backup.data.model.Settlement"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.address.StreetInfo" value="ua.southpost.resource.backup.data.model.Street"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.address.LocationInfo" value="ua.southpost.resource.backup.data.model.Location"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.contact.PhoneInfo" value="ua.southpost.resource.backup.data.model.Phone"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.contact.EmailInfo" value="ua.southpost.resource.backup.data.model.EmailAddress"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.employer.EmployerInfo" value="ua.southpost.resource.backup.data.model.Employer"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.vacancy.VacancyInfo" value="ua.southpost.resource.backup.data.model.Vacancy"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.dwelling.DwellingInfo" value="ua.southpost.resource.backup.data.model.Dwelling"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.clinic.ClinicInfo" value="ua.southpost.resource.backup.data.model.Clinic"/>
+		<entry key="ua.southpost.resource.backup.web.model.dto.lawyer.LawyerAgencyInfo" value="ua.southpost.resource.backup.data.model.LawyerAgency"/>
+	</util:map>
+
+</beans>

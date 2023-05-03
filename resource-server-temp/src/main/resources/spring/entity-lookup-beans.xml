@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="settlementEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>One of the core lookup services</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="settlementSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.SettlementSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.SettlementRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="settlementInfoMapper"/>
+	</bean>
+
+	<bean id="streetEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>One of the core lookup services</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="streetSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.StreetSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.StreetRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="streetInfoMapper"/>
+	</bean>
+
+	<bean id="locationEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>Assumed to be a member of either core API service or separate microservice</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="locationSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.LocationSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.LocationRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="locationInfoMapper"/>
+	</bean>
+
+	<bean id="phoneEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>One of the core lookup services</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="phoneSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.PhoneSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.PhoneRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="phoneInfoMapper"/>
+	</bean>
+
+	<bean id="emailEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>One of the core lookup services</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="emailSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.EmailSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.EmailAddressRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="emailInfoMapper"/>
+	</bean>
+
+	<bean id="employerEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>One of the core lookup services</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="employerSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.EmployerSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.EmployerRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="employerInfoMapper"/>
+	</bean>
+
+	<bean id="userEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>Assumed to be a part of core functionality or specialized microservice</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="userSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.UserSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.UserRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="detailedUserInfoMapper"/>
+	</bean>
+
+	<bean id="vacancyEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>Assumed to be moved in separate API microservice</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="vacancySearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.VacancySearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.VacancyRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="vacancyInfoMapper"/>
+	</bean>
+
+	<bean id="dwellingEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>Assumed to be moved in separate API microservice</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="dwellingSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.DwellingSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.DwellingRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="dwellingInfoMapper"/>
+	</bean>
+
+	<bean id="clinicEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<description>Assumed to be moved in separate API microservice</description>
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="clinicSearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.ClinicSearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.ClinicRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="clinicInfoMapper"/>
+	</bean>
+
+	<bean id="lawyerAgencyEntityLookupService" class="lookup.service.api.ua.southpost.resource.EntityLookupServiceImpl">
+		<constructor-arg name="entitySearchAndLookupUtil" ref="entitySearchAndLookupUtil"/>
+		<constructor-arg name="entitySearchService" ref="lawyerAgencySearchService"/>
+		<constructor-arg name="sortService">
+			<bean class="sort.service.api.ua.southpost.resource.SortServiceImpl">
+				<constructor-arg name="payloadType" value="ua.southpost.resource.backup.api.model.search.LawyerAgencySearchRequestPayload"/>
+				<constructor-arg name="defaultSort">
+					<util:constant static-field="ua.southpost.resource.backup.data.repo.LawyerAgencyRepository.DEFAULT_SORT"/>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+		<constructor-arg name="mapper" ref="lawyerAgencyInfoMapper"/>
+	</bean>
+
+</beans>

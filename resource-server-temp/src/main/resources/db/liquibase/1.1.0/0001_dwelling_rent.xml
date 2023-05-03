@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018. Mykola Chyslin personal development.
+  ~ All rights reserved
+  -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_liquibase_path">
+    <changeSet id="0002.0001_create_dwelling_table" author="Mykola Chyslin">
+        <sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+        CREATE TABLE dwelling (
+            ID                  SERIAL,
+            SETTLEMENT_ID       BIGINT UNSIGNED NOT NULL,
+            SETTLEMENT_AREA     VARCHAR(80) CHARSET UTF8 COLLATE utf8_unicode_ci NOT NULL,
+            KIND                ENUM ('HOSTEL', 'ROOM', 'BACHELOR_FLAT', 'FLAT', 'HOUSE') NOT NULL,
+            NUMBER_OF_ROOMS     TINYINT DEFAULT 0 NOT NULL,
+            TOTAL_AREA          DECIMAL(12,4) DEFAULT 0.0 NOT NULL,
+            LIVING_AREA         DECIMAL(12,4) DEFAULT 0.0 NOT NULL,
+            CONTACT_ID          BIGINT UNSIGNED NOT NULL,
+            PRICE               DECIMAL(12,2) NOT NULL,
+            BILLING_PERIOD      ENUM('DAY', 'WEEK', 'MONTH', 'QUARTER', 'HALF_YEAR', 'YEAR') NOT NULL,
+            LOCATION_ID         BIGINT UNSIGNED NULL,
+            DESCRIPTION         TEXT CHARSET UTF8 COLLATE utf8_unicode_ci,
+            MODIFICATION_TIME   DATETIME NOT NULL,
+            OPERATOR_ID         BIGINT UNSIGNED NOT NULL,
+            CONSTRAINT dwelling_p PRIMARY KEY (ID),
+            CONSTRAINT dwelling_u UNIQUE(SETTLEMENT_ID, CONTACT_ID, KIND, NUMBER_OF_ROOMS, TOTAL_AREA, LIVING_AREA),
+            CONSTRAINT dwelling_settlement_f FOREIGN KEY (SETTLEMENT_ID)
+                REFERENCES address_settlement (ID)
+                    ON DELETE RESTRICT,
+            INDEX dwelling_settlement_fi (SETTLEMENT_ID),
+            CONSTRAINT dwelling_location_f
+                FOREIGN KEY (LOCATION_ID)
+                REFERENCES address_location(ID)
+                ON DELETE RESTRICT,
+            CONSTRAINT dwelling_contact_f
+                FOREIGN KEY (CONTACT_ID)
+                REFERENCES contact (ID)
+                ON DELETE RESTRICT,
+            INDEX dwelling_contact_fi (CONTACT_ID),
+            CONSTRAINT dwelling_operator_f
+                FOREIGN KEY (OPERATOR_ID)
+                REFERENCES user (ID)
+                ON DELETE RESTRICT,
+            INDEX dwelling_operator_fi (OPERATOR_ID)
+        ) ENGINE = INNODB;
+]]></sql>
+        <rollback>
+            <sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+            DROP TABLE dwelling;
+]]></sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0002.0001.01_update_unique_constraint" author="Mykola Chyslin">
+        <sql dbms="mysql" splitStatements="true" stripComments="true"><![CDATA[
+        ALTER TABLE dwelling DROP INDEX dwelling_u;
+
+        ALTER TABLE dwelling ADD CONSTRAINT dwelling_u UNIQUE(SETTLEMENT_ID, SETTLEMENT_AREA, CONTACT_ID, KIND, NUMBER_OF_ROOMS, TOTAL_AREA, LIVING_AREA);
+            ]]></sql>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

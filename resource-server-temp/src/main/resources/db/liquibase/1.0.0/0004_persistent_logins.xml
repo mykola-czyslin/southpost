@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_liquibase_path">
+    <changeSet id="0004" author="Mykola Chyslin">
+        <comment>create persistent_logins table</comment>
+        <sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+        create table persistent_logins (
+            username varchar(64) CHARSET UTF8 COLLATE UTF8_UNICODE_CI not null,
+            series varchar(64) CHARSET UTF8 COLLATE UTF8_UNICODE_CI primary key,
+            token varchar(64) CHARSET UTF8 COLLATE UTF8_UNICODE_CI not null,
+            last_used timestamp not null
+        ) engine=INNODB;
+]]></sql>
+        <rollback>
+            drop table persistent_logins;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_test">
+
+    <changeSet id="2.1.6-test-000" author="Mykola Chyslin">
+        <tagDatabase tag="test-2.1.6-0000"/>
+    </changeSet>
+    
+    
+	<changeSet id="2.1.6-test-001" author="Mykola Chyslin">
+		<sqlFile dbms="mysql" path="sql/2.1.6/user-test-data-cleanup.sql" stripComments="true"
+				 relativeToChangelogFile="true" splitStatements="true" endDelimiter=";"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/user-test-data-prepare.sql" stripComments="true" splitStatements="true"
+				 relativeToChangelogFile="true" endDelimiter=";"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/user-test-data-cleanup.sql" stripComments="true"
+					 relativeToChangelogFile="true" splitStatements="true" endDelimiter=";"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.6-test-002" author="Mykola Chyslin">
+		<sqlFile dbms="mysql" path="sql/2.1.6/settlement-test-data-cleanup.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/settlement-test-data-prepare.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/settlement-test-data-cleanup.sql" splitStatements="true"
+					 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		</rollback>
+	</changeSet>
+	<changeSet id="2.1.6-test-003" author="Mykola Chyslin">
+		<sqlFile dbms="mysql" path="sql/2.1.6/street-test-data-cleanup.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/street-test-data-prepare.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<rollback>
+			<sqlFile path="sql/2.1.6/street-test-data-cleanup.sql" splitStatements="true"
+					 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		</rollback>
+	</changeSet>
+	<changeSet id="2.1.6-test-004" author="Mykola Chyslin">
+		<sqlFile dbms="mysql" path="sql/2.1.6/location-test-data-cleanup.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/location-test-data-prepare.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/location-test-data-cleanup.sql" splitStatements="true"
+					 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		</rollback>
+	</changeSet>
+	<changeSet id="2.1.6-test-006" author="Mykola Chyslin">
+		<sqlFile dbms="mysql" path="sql/2.1.6/employer-test-data-cleanup.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/employer-test-data-prepare.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/employer-test-data-cleanup.sql" splitStatements="true"
+					 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		</rollback>
+	</changeSet>
+	<changeSet id="2.1.6-test-007" author="Mykola Chyslin">
+		<sqlFile dbms="mysql" path="sql/2.1.6/vacancy-test-data-cleanup.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/vacancy-test-data-prepare.sql" splitStatements="true"
+				 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/vacancy-test-data-cleanup.sql" splitStatements="true"
+					 stripComments="true" relativeToChangelogFile="true" endDelimiter=";"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.6-test-008" author="Mykola Chyslin">
+		<comment>Prepare Dwelling data</comment>
+		<sqlFile dbms="mysql" path="sql/2.1.6/dwelling-test-data-cleanup.sql" stripComments="true" splitStatements="true"
+				 endDelimiter=";" relativeToChangelogFile="true"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/dwelling-test-data-prepare.sql" stripComments="true" splitStatements="true"
+				 endDelimiter=";" relativeToChangelogFile="true"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/dwelling-test-data-cleanup.sql" stripComments="true"
+					 splitStatements="true"
+					 endDelimiter=";" relativeToChangelogFile="true"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.6-test-009" author="Mykola Chyslin">
+		<comment>Prepare Clinic Data</comment>
+		<sqlFile dbms="mysql" path="sql/2.1.6/clinic-test-data-cleanup.sql" stripComments="true" splitStatements="true"
+				 endDelimiter=";" relativeToChangelogFile="true"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/clinic-test-data-prepare.sql" stripComments="true" splitStatements="true"
+				 endDelimiter=";" relativeToChangelogFile="true"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/clinic-test-data-cleanup.sql" stripComments="true"
+					 splitStatements="true"
+					 endDelimiter=";" relativeToChangelogFile="true"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.6-010" author="Mykola Chyslin">
+		<comment>LawyerAgency test data</comment>
+		<sqlFile dbms="mysql" path="sql/2.1.6/lawyer-agency-data-cleanup.sql" splitStatements="true"
+				 stripComments="true"
+				 relativeToChangelogFile="true" endDelimiter=";"/>
+		<sqlFile dbms="mysql" path="sql/2.1.6/lawyer-agency-data-prepare.sql" splitStatements="true" stripComments="true"
+				 relativeToChangelogFile="true" endDelimiter=";"/>
+		<rollback>
+			<sqlFile dbms="mysql" path="sql/2.1.6/lawyer-agency-data-cleanup.sql" splitStatements="true"
+					 stripComments="true"
+					 relativeToChangelogFile="true" endDelimiter=";"/>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

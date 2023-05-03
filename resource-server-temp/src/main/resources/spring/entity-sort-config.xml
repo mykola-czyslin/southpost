@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<util:list id="vacancySort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="dwellingSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="price"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="userSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="lastName"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="firstName"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="settlementSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="district.region.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="district.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="streetSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="settlement.district.region.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="settlement.district.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="settlement.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="locationSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="street.settlement.district.region.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="street.settlement.district.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="street.settlement.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="street.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="postalCode"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="streetNumber"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="phoneSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchNumber"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="emailSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="emailAddress"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="employerSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="settlement.district.region.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="settlement.district.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="settlement.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="contactSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchName"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="clinicSort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchName"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+
+	<util:list id="lawyerAgencySort" value-type="ua.southpost.resource.commons.model.dto.SortOption">
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="settlement.searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+		<bean class="ua.southpost.resource.commons.model.dto.SortOption">
+			<constructor-arg index="0" value="searchValue"/>
+			<constructor-arg index="1" value="ASC"/>
+		</bean>
+	</util:list>
+</beans>

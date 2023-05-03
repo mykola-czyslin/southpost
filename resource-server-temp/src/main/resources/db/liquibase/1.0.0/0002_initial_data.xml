@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018. Mykola Chyslin personal development.
+  ~ All rights reserved
+  -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_liquibase_path">
+    <changeSet id="002_001" author="Mykola Chyslin">
+        <comment>regions of Ukraine</comment>
+        <sqlFile path="sql/002_001_add_regions.sql"
+                 relativeToChangelogFile="true"
+                 dbms="mysql"
+                 encoding="UTF-8"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="002_002" author="Mykola Chyslin">
+        <comment>add districts</comment>
+        <sqlFile path="sql/002_002_add_districts.sql"
+                 relativeToChangelogFile="true"
+                 dbms="mysql"
+                 encoding="UTF-8"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+
+        <rollback/>
+
+    </changeSet>
+
+    <changeSet id="002_003" author="Mykola Chyslin">
+        <comment>add region main cities</comment>
+        <sqlFile path="sql/002_003_add_region_main_cities.sql"
+                 relativeToChangelogFile="true"
+                 stripComments="true"
+                 splitStatements="true"
+                 endDelimiter=";"
+                 dbms="mysql"
+                 encoding="UTF-8"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="002_005" author="Mykola Chyslin">
+        <comment>add supervisor user</comment>
+        <sqlFile path="sql/002_005_add_supervisor.sql"
+                 relativeToChangelogFile="true"
+                 stripComments="true"
+                 splitStatements="true"
+                 endDelimiter=";"
+                 dbms="mysql"
+                 encoding="UTF-8"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="002_006" author="Mykola Chyslin">
+        <comment>add district-level or above settlements</comment>
+        <sqlFile path="sql/002_004_add_district_settlements.sql"
+                 relativeToChangelogFile="true"
+                 stripComments="true"
+                 splitStatements="true"
+                 endDelimiter=";"
+                 dbms="mysql"
+                 encoding="UTF-8"/>
+        <rollback/>
+    </changeSet>
+
+</databaseChangeLog>

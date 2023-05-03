@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+				   logicalFilePath="what_where_liquibase_path">
+
+	<changeSet id="2.0.6.0001.01" author="Mykola Chyslin">
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+		CREATE TABLE `user_declared_activity` (
+			USER_ID          BIGINT UNSIGNED NOT NULL,
+			ACTIVITY_KIND    ENUM('EMPLOYER', 'PROPERTY_AGENT', 'LAW_ASSISTANT', 'CLINIC_ADVISOR', 'VISITOR'),
+			CONSTRAINT user_declared_activity_p PRIMARY KEY (USER_ID, ACTIVITY_KIND),
+			CONSTRAINT user_declared_activity_f FOREIGN KEY(USER_ID)
+				REFERENCES `user`(ID)
+				ON DELETE CASCADE
+		) ENGINE = INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			drop table `user_declared_activity`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.0.6.0001.02" author="Mykola Chyslin">
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+		CREATE TABLE `user_confirmed_activity` (
+			USER_ID          BIGINT UNSIGNED NOT NULL,
+			ACTIVITY_KIND    ENUM('EMPLOYER', 'PROPERTY_AGENT', 'LAW_ASSISTANT', 'CLINIC_ADVISOR', 'VISITOR'),
+			CONSTRAINT user_confirmed_activity_p PRIMARY KEY (USER_ID, ACTIVITY_KIND),
+			CONSTRAINT user_confirmed_activity_f FOREIGN KEY(USER_ID)
+				REFERENCES `user`(ID)
+				ON DELETE CASCADE
+		) ENGINE = INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			drop table `user_confirmed_activity`;
+]]></sql>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

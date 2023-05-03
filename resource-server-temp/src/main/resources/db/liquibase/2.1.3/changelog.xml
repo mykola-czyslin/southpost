@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+	<include file="0000_init_tag.xml" relativeToChangelogFile="true"/>
+	<include file="0001_redesign_entity_contact_data_model.xml" relativeToChangelogFile="true"/>
+	<include file="0002_fix_medical_service_type.xml" relativeToChangelogFile="true"/>
+	<include file="0003_fix_set_of_street_kinds.xml" relativeToChangelogFile="true"/>
+	<include file="0004_add_modification_tracking_to_employer.xml" relativeToChangelogFile="true"/>
+	<include file="0005_add_dwelling_identity_index.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+				   logicalFilePath="what_where_liquibase_path">
+	<changeSet id="2.1.3-01.01" author="Mykola Chyslin">
+		<comment>Add LOCATION_ID column to CLINIC table</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+					ALTER TABLE `clinic`
+				ADD COLUMN LOCATION_ID BIGINT UNSIGNED NULL;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` DROP COLUMN LOCATION_ID;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.02" author="Mykola Chyslin">
+		<comment>Add index on LOCATION_ID field</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` ADD INDEX `clinic_location_fi` (LOCATION_ID);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` DROP INDEX `clinic_location_fi`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.03" author="Mykola Chyslin">
+		<comment>Add foreign key from `clinic` table to `address_location` one</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` ADD CONSTRAINT `clinic_location_f` FOREIGN KEY (LOCATION_ID)
+				REFERENCES `address_location`(ID);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` DROP CONSTRAINT `clinic_location_f`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.04" author="Mykola Chyslin">
+		<comment>Bind contact location directly to `clinic` table.</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			UPDATE `clinic` cl
+				SET LOCATION_ID = (SELECT ct.LOCATION_ID FROM `contact` ct
+									WHERE ct.ID = cl.CONTACT_ID
+									AND ct.LOCATION_ID IS NOT NULL)
+			WHERE EXISTS (SELECT NULL FROM `contact` ct
+							WHERE ct.ID = cl.CONTACT_ID
+							AND ct.LOCATION_ID IS NOT NULL);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+				UPDATE `clinic` cl SET LOCATION_ID = NULL WHERE 1 = 2;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.05" author="Mykola Chyslin">
+		<comment>Create table `clinic_phones`</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			CREATE TABLE `clinic_phones` (
+				PHONE_ID  BIGINT UNSIGNED NOT NULL,
+				CLINIC_ID BIGINT UNSIGNED NOT NULL,
+				ORDINAL_INDEX INT UNSIGNED NOT NULL,
+				CONSTRAINT `clinic_phones_p` PRIMARY KEY (PHONE_ID, CLINIC_ID),
+				CONSTRAINT `clinic_phones_u` UNIQUE (CLINIC_ID, ORDINAL_INDEX),
+				CONSTRAINT `clinic_phones_phone_f` FOREIGN KEY(PHONE_ID)
+					REFERENCES `phone` (ID)
+					ON DELETE CASCADE,
+				CONSTRAINT `clinic_phones_clinic_f` FOREIGN KEY(CLINIC_ID)
+					REFERENCES `clinic` (ID)
+					ON DELETE CASCADE
+			) ENGINE=INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			DROP table `clinic_phones`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.06" author="Mykola Chyslin">
+		<comment>create table `clinic_emails`</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			CREATE TABLE `clinic_emails` (
+				EMAIL_ADDRESS_ID   BIGINT UNSIGNED NOT NULL,
+				CLINIC_ID          BIGINT UNSIGNED NOT NULL,
+				ORDINAL_INDEX      INT NOT NULL,
+				CONSTRAINT `clinic_emails_p` PRIMARY KEY (EMAIL_ADDRESS_ID, CLINIC_ID),
+				CONSTRAINT `clinic_emails_u` UNIQUE (CLINIC_ID, ORDINAL_INDEX),
+				CONSTRAINT `clinic_emails_email_address_f` FOREIGN KEY(EMAIL_ADDRESS_ID)
+					REFERENCES `email_address` (ID)
+					ON DELETE CASCADE,
+				CONSTRAINT `clinic_emails_clinic_f` FOREIGN KEY(CLINIC_ID)
+					REFERENCES `clinic` (ID)
+					ON DELETE CASCADE
+			) ENGINE=INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+				DROP TABLE `clinic_emails`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.07" author="Mykola Chyslin">
+		<comment>Populate table `clinic_phones`</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			INSERT INTO `clinic_phones` (PHONE_ID, CLINIC_ID, ORDINAL_INDEX)
+			SELECT cp.PHONE_ID, clc.ID as CLINIC_ID, cp.ORDINAL_INDEX
+			FROM `clinic` clc
+			JOIN `contact_phone` cp ON cp.CONTACT_ID = clc.CONTACT_ID;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			DELETE FROM `clinic_phones`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.08" author="Mykola Chyslin">
+		<comment>Populate table `clinic_emails`</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			INSERT INTO `clinic_emails` (EMAIL_ADDRESS_ID, CLINIC_ID, ORDINAL_INDEX)
+			SELECT cem.EMAIL_ADDRESS_ID, clc.ID, cem.ORDINAL_INDEX
+			FROM `clinic` clc
+			JOIN `contact_email_address` cem ON cem.CONTACT_ID = clc.ID;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			DELETE FROM `clinic_emails`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.09" author="Mykola Chyslin">
+		<comment>Drop `clinic_contact_f` constraint</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			ALTER TABLE `clinic` DROP FOREIGN KEY `clinic_contact_f`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` ADD CONSTRAINT `clinic_contact_f` FOREIGN KEY (CLINIC_ID)
+				REFERENCES `contact` (ID);
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.13-01.10" author="Mykola Chyslin">
+		<comment>Drop index `clinic_contact_fi`</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` DROP INDEX `clinic_contact_fi`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` ADD INDEX `clinic_contact_fi` (CLINIC_ID);
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-01.11" author="Mykola Chyslin">
+		<comment>Drop CONTACT_ID column from </comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` DROP COLUMN CONTACT_ID;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+			ALTER TABLE `clinic` ADD COLUMN CONTACT_ID BIGINT UNSIGNED NULL;
+
+			UPDATE `clinic` clc
+			SET clc.CONTACT_ID = CASE
+								  WHEN clc.LOCATION_ID IS NOT NULL
+									  THEN (SELECT DISTINCT ctt.ID FROM `contact` ctt
+											WHERE ctt.LOCATION_ID = clc.LOCATION_ID
+										  LIMIT 1)
+								  WHEN clc.LOCATION_ID IS NULL AND EXISTS (SELECT NULL FROM `clinic_phones` clcp WHERE clcp.CLINIC_ID = clc.ID)
+									THEN (SELECT DISTINCT cttp.CONTACT_ID from `contact_phone` cttp JOIN `clinic_phones` clcp ON cttp.PHONE_ID = clcp.PHONE_ID
+										  WHERE clcp.CLINIC_ID = clc.ID
+									LIMIT 1)
+								  WHEN clc.LOCATION_ID IS NULL AND NOT EXISTS (SELECT NULL FROM `clinic_phones` clcp WHERE clcp.CLINIC_ID = clc.ID)
+									AND EXISTS(SELECT NULL FROM `clinic_emails` clce WHERE clce.CLINIC_ID = clc.ID)
+								  THEN (SELECT DISTINCT ctte.CONTACT_ID FROM contact_email_address ctte JOIN `clinic_emails` clce ON clce.EMAIL_ADDRESS_ID = ctte.EMAIL_ADDRESS_ID
+										WHERE clce.CLINIC_ID = clc.ID
+									  LIMIT 1)
+								END CONTACT_ID;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+
+	<changeSet id="2.1.3-02.01" author="Mykola Chyslin">
+		<comment>Add LOCATION_ID field to `employer` table</comment>
+		<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+		ALTER TABLE `employer` ADD COLUMN LOCATION_ID BIGINT UNSIGNED NULL;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+		ALTER TABLE `employer` DROP COLUMN LOCATION_ID;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-02.02" author="Mykola Chyslin">
+		<comment>Populate LOCATION_ID column of the `employer` table</comment>
+		<sql dbms="mysql" splitStatements="true" stripComments="true" endDelimiter=";"><![CDATA[
+		UPDATE `employer` e
+		  SET e.LOCATION_ID = (SELECT c.LOCATION_ID FROM `contact` c
+								JOIN `employer_contact` ec ON c.ID = ec.CONTACT_ID
+								WHERE ec.ORDINAL_INDEX = 0
+								AND c.LOCATION_ID IS NOT NULL
+								AND ec.EMPLOYER_ID = e.ID)
+		WHERE EXISTS (SELECT NULL FROM `employer_contact` ec
+						JOIN `contact` c ON ec.CONTACT_ID = c.ID
+						WHERE e.ID = ec.EMPLOYER_ID
+						AND ec.ORDINAL_INDEX = 0
+						AND c.LOCATION_ID IS NOT NULL);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			UPDATE `employer` e
+			SET e.LOCATION_ID = NULL;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-02.03" author="Mykola Chyslin">
+		<comment>Add index on `employer`.LOCATION_ID column</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer` ADD INDEX `employer_location_fi` (LOCATION_ID);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer` DROP INDEX `employer_location_fi`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-02.04" author="Mykola Chyslin">
+		<comment>Add foreign key on `employer`.LOCATION_ID referencing `location`.ID</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer` ADD CONSTRAINT `employer_location_f`
+			FOREIGN KEY (LOCATION_ID)
+			REFERENCES `address_location` (ID);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer` DROP FOREIGN KEY `employer_location_f`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-02.05" author="Mykola Chyslin">
+		<comment>Create table `employer_phones`</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			CREATE TABLE `employer_phones` (
+				PHONE_ID      BIGINT UNSIGNED NOT NULL,
+				EMPLOYER_ID   BIGINT UNSIGNED NOT NULL,
+				ORDINAL_INDEX INT UNSIGNED NOT NULL,
+				CONSTRAINT `employer_phones_p` PRIMARY KEY (PHONE_ID, EMPLOYER_ID),
+				CONSTRAINT `employer_phones_u` UNIQUE (EMPLOYER_ID, ORDINAL_INDEX),
+				CONSTRAINT `employer_phones_phone_f` FOREIGN KEY(PHONE_ID)
+					REFERENCES `phone` (ID)
+					ON DELETE CASCADE,
+				CONSTRAINT `employer_phones_employer_f` FOREIGN KEY(EMPLOYER_ID)
+					REFERENCES `employer` (ID)
+					ON DELETE CASCADE
+			) ENGINE=INNODB;
+]]></sql>
+		<rollback>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			DROP table `employer_phones`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-02.06" author="Mykola Chyslin">
+		<comment>Populate table `employer_phones`</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		INSERT INTO `employer_phones` (PHONE_ID, EMPLOYER_ID, ORDINAL_INDEX)
+		SELECT cp.PHONE_ID, ec.EMPLOYER_ID, cp.ORDINAL_INDEX FROM `contact_phone` cp
+		JOIN `employer_contact` ec ON ec.CONTACT_ID = cp.CONTACT_ID
+		WHERE ec.ORDINAL_INDEX = 0;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DELETE FROM `employer_phones`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-02.07" author="Mykola Chyslin">
+		<comment>Create table `employer_emails`</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			CREATE TABLE `employer_emails` (
+				EMAIL_ADDRESS_ID   BIGINT UNSIGNED NOT NULL,
+				EMPLOYER_ID        BIGINT UNSIGNED NOT NULL,
+				ORDINAL_INDEX      INT NOT NULL,
+				CONSTRAINT `employer_emails_p` PRIMARY KEY (EMAIL_ADDRESS_ID, EMPLOYER_ID),
+				CONSTRAINT `employer_emails_u` UNIQUE (EMPLOYER_ID, ORDINAL_INDEX),
+				CONSTRAINT `employer_emails_email_address_f` FOREIGN KEY(EMAIL_ADDRESS_ID)
+					REFERENCES `email_address` (ID)
+					ON DELETE CASCADE,
+				CONSTRAINT `employer_emails_employer_f` FOREIGN KEY(EMPLOYER_ID)
+					REFERENCES `employer` (ID)
+					ON DELETE CASCADE
+			) ENGINE=INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+				DROP TABLE `employer_emails`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-02.08" author="Mykola Chyslin">
+		<comment>Populate table `employer_emails`</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter="true"><![CDATA[
+		INSERT INTO `employer_emails` (EMAIL_ADDRESS_ID, EMPLOYER_ID, ORDINAL_INDEX)
+		SELECT ce.EMAIL_ADDRESS_ID, ec.EMPLOYER_ID, ce.ORDINAL_INDEX
+		FROM `contact_email_address` ce
+		JOIN `employer_contact` ec ON ec.CONTACT_ID = ce.CONTACT_ID
+		WHERE ec.ORDINAL_INDEX = 0;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DELETE FROM `employer_emails`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.01" author="Mykola Chyslin">
+		<comment>Create table `dwelling_phones`</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			CREATE TABLE `dwelling_phones` (
+				PHONE_ID      BIGINT UNSIGNED NOT NULL,
+				DWELLING_ID   BIGINT UNSIGNED NOT NULL,
+				ORDINAL_INDEX INT UNSIGNED NOT NULL,
+				CONSTRAINT `dwelling_phones_p` PRIMARY KEY (PHONE_ID, DWELLING_ID),
+				CONSTRAINT `dwelling_phones_u` UNIQUE (DWELLING_ID, ORDINAL_INDEX),
+				CONSTRAINT `dwelling_phones_phone_f` FOREIGN KEY(PHONE_ID)
+					REFERENCES `phone` (ID)
+					ON DELETE CASCADE,
+				CONSTRAINT `dwelling_phones_dwelling_f` FOREIGN KEY(DWELLING_ID)
+					REFERENCES `dwelling` (ID)
+					ON DELETE CASCADE
+			) ENGINE=INNODB;
+]]></sql>
+		<rollback>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			DROP table `dwelling_phones`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.02" author="Mykola Chyslin">
+		<comment>Populate `dwelling_phones` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		INSERT INTO `dwelling_phones` (PHONE_ID, DWELLING_ID, ORDINAL_INDEX)
+		SELECT cp.PHONE_ID, d.ID, cp.ORDINAL_INDEX
+		FROM `contact_phone` cp
+		JOIN `dwelling` d ON d.CONTACT_ID = cp.CONTACT_ID;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DELETE FROM `dwelling_phones`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.03" author="Mykola Chyslin">
+		<comment>Create `dwelling_emails` table</comment>
+		<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+			CREATE TABLE `dwelling_emails` (
+				EMAIL_ADDRESS_ID   BIGINT UNSIGNED NOT NULL,
+				DWELLING_ID        BIGINT UNSIGNED NOT NULL,
+				ORDINAL_INDEX      INT NOT NULL,
+				CONSTRAINT `dwelling_emails_p` PRIMARY KEY (EMAIL_ADDRESS_ID, DWELLING_ID),
+				CONSTRAINT `dwelling_emails_u` UNIQUE (DWELLING_ID, ORDINAL_INDEX),
+				CONSTRAINT `dwelling_emails_email_address_f` FOREIGN KEY(EMAIL_ADDRESS_ID)
+					REFERENCES `email_address` (ID)
+					ON DELETE CASCADE,
+				CONSTRAINT `dwelling_emails_dwelling_f` FOREIGN KEY(DWELLING_ID)
+					REFERENCES `dwelling` (ID)
+					ON DELETE CASCADE
+			) ENGINE=INNODB;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" endDelimiter=";" stripComments="true" splitStatements="true"><![CDATA[
+				DROP TABLE `dwelling_emails`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.04" author="Mykola Chyslin">
+		<comment>Populate `dwelling_phones` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		INSERT INTO `dwelling_emails` (EMAIL_ADDRESS_ID, DWELLING_ID, ORDINAL_INDEX)
+		SELECT cea.EMAIL_ADDRESS_ID, d.ID, cea.ORDINAL_INDEX
+		FROM `contact_email_address` cea
+		JOIN `dwelling` d ON d.CONTACT_ID = cea.CONTACT_ID;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";">
+				DELETE FROM `dwelling_emails`;
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.05" author="Mykola Chyslin">
+		<comment>Make `dwelling`.CONTACT_ID column nullable</comment>
+		<sql dbms="musql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `dwelling` MODIFY CONTACT_ID BIGINT UNSIGNED NULL;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			DELETE FROM `dwelling` WHERE CONTACT_ID IS NULL;
+
+			ALTER TABLE `dwelling` MODIFY CONTACT_ID BIGINT UNSIGNED NOT NULL;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.06-01" author="Mykola Chyslin">
+		<comment>Drop `dwelling_u` unique constraint</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `dwelling` DROP INDEX `dwelling_u`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `dwelling` ADD CONSTRAINT `dwelling_u` UNIQUE (SETTLEMENT_ID, SETTLEMENT_AREA, CONTACT_ID, KIND, NUMBER_OF_ROOMS, TOTAL_AREA, LIVING_AREA);
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.06-02" author="Mykola Chyslin">
+		<comment>Remove foreign key on `contact` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter="true"><![CDATA[
+		ALTER TABLE `dwelling` DROP FOREIGN KEY `dwelling_contact_f`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter="true"><![CDATA[
+			ALTER TABLE `dwelling` ADD CONSTRAINT `dwelling_contact_f`
+				FOREIGN KEY(CONTACT_ID)
+				REFERENCES `contact`(ID);
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.06-03" author="Mykola Chyslin">
+		<comment>Remove index `dwelling_contact_fi`</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `dwelling` DROP INDEX `dwelling_contact_fi`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `dwelling` ADD INDEX `dwelling_contact_fi` (CONTACT_ID);
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-03.06-04" author="Mykola Chyslin">
+		<comment>Remove CONTACT_ID column from then `dwelling` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `dwelling` DROP COLUMN CONTACT_ID;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `dwelling` ADD CONTACT_ID BIGINT UNSIGNED NULL;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+
+
+	<!-- perform database clean-up after tests will have been completed -->
+	<changeSet id="2.1.3-04.01-01" author="Mykola Chyslin">
+		<comment>Remove foreign key `employer_vacancy_contact_f`  from `employer_vacancy` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer_vacancy` DROP FOREIGN KEY `employer_vacancy_contact_f`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer_vacancy` ADD CONSTRAINT `employer_vacancy_contact_f`
+				FOREIGN KEY (CONTACT_ID)
+				REFERENCES `contact`(ID);
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-04.01-02" author="Mykola Chyslin">
+		<comment>Remove index `employer_vacancy_contact_if` from `employer_vacancy` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer_vacancy` DROP INDEX `employer_vacancy_contact_if`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer_vacancy` ADD INDEX `employer_vacancy_contact_if` (CONTACT_ID);
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-04.01-03" author="Mykola Chyslin">
+		<comment>Remove CONTACT_ID column from `employer_vacancy` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer_vacancy` DROP COLUMN CONTACT_ID;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer_vacancy` ADD CONTACT_ID BIGINT UNSIGNED NULL;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-04.02" author="Mykola Chyslin">
+		<comment>Remove `employer_contacts` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		DROP TABLE `employer_contact`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			CREATE TABLE `employer_contact` (
+  `CONTACT_ID` bigint(20) unsigned NOT NULL,
+  `EMPLOYER_ID` bigint(20) unsigned NOT NULL,
+  `ORDINAL_INDEX` int(10) unsigned NOT NULL,
+  UNIQUE KEY `employer_contact_p` (`CONTACT_ID`),
+  UNIQUE KEY `employer_contact_u` (`EMPLOYER_ID`,`ORDINAL_INDEX`),
+  KEY `employer_contact_employer_if` (`EMPLOYER_ID`),
+  CONSTRAINT `employer_contact_contact_f` FOREIGN KEY (`CONTACT_ID`) REFERENCES `contact` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `employer_contact_employer_f` FOREIGN KEY (`EMPLOYER_ID`) REFERENCES `employer` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-04.03-01" author="Mykola Chyslin">
+		<comment>Remove `contact_phone` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		DROP TABLE `contact_phone`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			CREATE TABLE `contact_phone` (
+  `PHONE_ID` bigint(20) unsigned NOT NULL,
+  `CONTACT_ID` bigint(20) unsigned NOT NULL,
+  `ORDINAL_INDEX` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`PHONE_ID`),
+  UNIQUE KEY `contact_phone_contact_u` (`CONTACT_ID`,`ORDINAL_INDEX`),
+  CONSTRAINT `contact_phone_contact_f` FOREIGN KEY (`CONTACT_ID`) REFERENCES `contact` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `contact_phone_phone_f` FOREIGN KEY (`PHONE_ID`) REFERENCES `phone` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-04.03-02" author="Mykola Chyslin">
+		<comment>Remove table `contact_email_address`</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		DROP TABLE `contact_email_address`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+CREATE TABLE `contact_email_address` (
+  `EMAIL_ADDRESS_ID` bigint(20) unsigned NOT NULL,
+  `CONTACT_ID` bigint(20) unsigned NOT NULL,
+  `ORDINAL_INDEX` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`EMAIL_ADDRESS_ID`),
+  UNIQUE KEY `contact_email_address_u` (`CONTACT_ID`,`ORDINAL_INDEX`),
+  CONSTRAINT `contact_email_address_email_f` FOREIGN KEY (`EMAIL_ADDRESS_ID`) REFERENCES `email_address` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-04.03-03" author="Mykola Chyslin">
+		<comment>Remove `contact` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		DROP TABLE `contact`;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			CREATE TABLE `contact` (
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `DISPLAY_NAME` varchar(80) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `SEARCH_NAME` varchar(80) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `CONTACT_DESCRIPTION` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `LOCATION_ID` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`),
+  UNIQUE KEY `contact_display_name_u` (`DISPLAY_NAME`),
+  UNIQUE KEY `contact_search_name_u` (`SEARCH_NAME`),
+  KEY `contact_location_if` (`LOCATION_ID`),
+  CONSTRAINT `contact_location_f` FOREIGN KEY (`LOCATION_ID`) REFERENCES `address_location` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=20024 DEFAULT CHARSET=UTF8;
+]]></sql>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

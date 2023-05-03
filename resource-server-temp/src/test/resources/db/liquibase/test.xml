@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_test">
+    <changeSet id="000" author="Mykola Chyslin">
+        <tagDatabase tag="test.0000"/>
+    </changeSet>
+
+    <changeSet id="001" author="Mykola Chyslin">
+        <sqlFile path="sql/prepare-user-dao-test-data.sql" stripComments="true" splitStatements="true" dbms="mysql" encoding="UTF-8" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/cleanup-user-dao-test-data.sql" dbms="mysql" stripComments="true" relativeToChangelogFile="true" encoding="UTF-8" splitStatements="true"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="002" author="Mykola Chyslin">
+        <sqlFile dbms="mysql" path="sql/prepare-settlement-dao-test-data.sql" splitStatements="true"
+                 stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/cleanup-settlement-dao-test-data.sql" splitStatements="true"
+                     stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="003" author="Mykola Chyslin">
+        <sqlFile dbms="mysql" path="sql/prepare-street-dao-test-data.sql" splitStatements="true"
+                 stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/cleanup-street-dao-test-data.sql" splitStatements="true"
+                     stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="004" author="Mykola Chyslin">
+        <sqlFile dbms="mysql" path="sql/prepare-test-location-data.sql" splitStatements="true"
+                 stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/cleanup-test-location-data.sql" splitStatements="true"
+                     stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="005" author="Mykola Chyslin">
+        <sqlFile dbms="mysql" path="sql/prepare-test-contact-data.sql" splitStatements="true"
+                 stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/cleanup-test-contact-data.sql" splitStatements="true"
+                     stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="006" author="Mykola Chyslin">
+        <sqlFile dbms="mysql" path="sql/prepare-employer-test-data.sql" splitStatements="true"
+                 stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/cleanup-employer-test-data.sql" splitStatements="true"
+                     stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="007" author="Mykola Chyslin">
+        <sqlFile dbms="mysql" path="sql/prepare-vacancy-test-data.sql" splitStatements="true"
+                 stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="sql/cleanup-vacancy-test-data.sql" splitStatements="true"
+                     stripComments="true" encoding="UTF-8" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

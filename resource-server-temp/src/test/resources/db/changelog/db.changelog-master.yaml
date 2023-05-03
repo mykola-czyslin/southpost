@@ -1,0 +1,6 @@
+databaseChangeLog :
+  changeSet :
+    id : 2.0.1-test
+    author: Mykola Chyslin
+    changes:
+      tagDatabase : 2.0.1-test

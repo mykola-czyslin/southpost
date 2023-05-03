@@ -1,0 +1,124 @@
+{
+	"properties": [
+		{
+			"name": "connection.url",
+			"type": "java.lang.String",
+			"description": "JDBC Connection URL."
+		},
+		{
+			"name": "connection.username",
+			"type": "java.lang.String",
+			"description": "User name used for JDBC connection."
+		},
+		{
+			"name": "connection.password",
+			"type": "java.lang.String",
+			"description": "JDBC connection password."
+		},
+		{
+			"name": "connection.driver.class.name",
+			"type": "java.lang.String",
+			"description": "JDBC driver class name used to establish database connection."
+		},
+		{
+			"name": "data.source.factory.class",
+			"type": "java.lang.String",
+			"description": "Data source factory class name."
+		},
+		{
+			"name": "connection.jndi.name",
+			"type": "java.lang.String",
+			"description": "Data source JNDI name."
+		},
+		{
+			"name": "connection.jndi.lookup.name",
+			"type": "java.lang.String",
+			"description": "Data source JNDI lookup name."
+		},
+		{
+			"name": "jpa.persistence.unit",
+			"type": "java.lang.String",
+			"description": "JPA persistence unit name."
+		},
+		{
+			"name": "view.grid.rows.per.page",
+			"type": "java.lang.String",
+			"description": "Default number of rows per page for the data grid."
+		},
+		{
+			"name": "password.encoder.strength",
+			"type": "java.lang.String",
+			"description": "Password encoder strength."
+		},
+		{
+			"name": "lookup.batch.size",
+			"type": "java.lang.String",
+			"description": "The batch size for lookup response."
+		},
+		{
+			"name": "view.grid.paging.page-labels-count",
+			"type": "java.lang.String",
+			"description": "Number of displayable pages numbers."
+		},
+		{
+			"name": "connection.host",
+			"type": "java.lang.String",
+			"description": "Host where database server runs."
+		},
+		{
+			"name": "connection.db.name",
+			"type": "java.lang.String",
+			"description": "The mysql database name where application data is stored."
+		},
+		{
+			"name": "hibernate.generate-ddl",
+			"type": "java.lang.String",
+			"description": "Determines should hibernate generate DDL or not."
+		},
+		{
+			"name": "hibernate.show-sql",
+			"type": "java.lang.String",
+			"description": "Determines should hibernate show SQL or not."
+		},
+		{
+			"name": "security.token.validity.seconds",
+			"type": "java.lang.Integer",
+			"description": "Persistent token validity duration."
+		},
+		{
+			"name": "security.default.authentication.success.url",
+			"type": "java.lang.String",
+			"description": "Default URL for redirect on authentication success."
+		},
+		{
+			"name": "security.supervisor.authentication.success.url",
+			"type": "java.lang.String",
+			"description": "Authentication success redirect URL for supervising users."
+		},
+		{
+			"name": "security.administrator.authentication.success.url",
+			"type": "java.lang.String",
+			"description": "Authentication success redirect URL for supervising users."
+		},
+		{
+			"name": "security.operator.authentication.success.url",
+			"type": "java.lang.String",
+			"description": "Authentication success redirect URL for operating users."
+		},
+		{
+			"name": "security.viewer.authentication.success.url",
+			"type": "java.lang.String",
+			"description": "Authentication success redirect URL for viewing-only users."
+		},
+		{
+			"name": "static.media.url.prefix",
+			"type": "java.lang.String",
+			"description": "URL-prefix for static media."
+		},
+		{
+			"name": "spring.application.properties.site.address",
+			"type": "java.lang.String",
+			"description": "A default site address for application."
+	  }
+  ]
+}

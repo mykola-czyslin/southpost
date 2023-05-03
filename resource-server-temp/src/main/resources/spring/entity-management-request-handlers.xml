@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="abstractEntityManagementRequestHandler" abstract="true" class="service.api.ua.southpost.resource.GenericEntityManagementRequestHandler">
+		<constructor-arg name="userRepository" ref="userRepository"/>
+		<constructor-arg name="entityHistoryService" ref="entityHistoryServiceImpl"/>
+		<constructor-arg name="messageSource" ref="messageSource"/>
+	</bean>
+
+
+	<bean id="settlementEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="settlementPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="settlementInfoMapper"/>
+	</bean>
+
+	<bean id="streetEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="streetPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="streetInfoMapper"/>
+	</bean>
+
+	<bean id="locationEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="locationPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="locationInfoMapper"/>
+	</bean>
+
+	<bean id="phoneEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="phonePayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="phoneInfoMapper"/>
+	</bean>
+
+	<bean id="emailEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="emailPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="emailInfoMapper"/>
+	</bean>
+
+	<bean id="employerEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="employerPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="employerInfoMapper"/>
+	</bean>
+
+	<bean id="clinicEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="clinicPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="clinicInfoMapper"/>
+	</bean>
+
+	<bean id="dwellingEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="dwellingPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="dwellingInfoMapper"/>
+	</bean>
+
+	<bean id="vacancyEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="vacancyPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="vacancyInfoMapper"/>
+	</bean>
+
+	<bean id="lawyerAgencyEntityManagementRequestHandler" parent="abstractEntityManagementRequestHandler">
+		<constructor-arg name="persistenceManager" ref="lawyerAgencyPayloadPersistenceManager"/>
+		<constructor-arg name="entityInfoMapper" ref="lawyerAgencyInfoMapper"/>
+	</bean>
+
+</beans>

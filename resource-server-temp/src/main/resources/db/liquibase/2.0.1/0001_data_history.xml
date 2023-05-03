@@ -1,0 +1,31 @@
+<!--
+  ~ Copyright (c) 2018. Mykola Chyslin personal development.
+  ~ All rights reserved
+  -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_liquibase_path">
+    <changeSet id="0003.0001.2.0.1_create_data_history_table" author="Mykola Chyslin">
+        <sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+        create table entity_data_history (
+            ID                SERIAL,
+            ENTITY_TYPE       VARCHAR(200) CHARSET UTF8 COLLATE utf8_unicode_ci NOT NULL,
+            ENTITY_ID         VARCHAR(24) CHARSET UTF8 COLLATE utf8_unicode_ci NOT NULL,
+            CHANGE_TYPE       ENUM('CREATE', 'UPDATE', 'DELETE') NOT NULL,
+            CHANGE_TIME       DATETIME NOT NULL,
+            CHANGED_BY        BIGINT(20) UNSIGNED NULL,
+            ENTITY_VALUE      TEXT CHARSET UTF8 NULL,
+            CONSTRAINT entity_data_history_p PRIMARY KEY (ID),
+            CONSTRAINT entity_data_history_u UNIQUE (ENTITY_TYPE, ENTITY_ID, CHANGE_TYPE, CHANGE_TIME),
+            CONSTRAINT entity_data_history_user_f FOREIGN KEY (CHANGED_BY)
+                REFERENCES user(ID),
+            INDEX entity_data_history_user_f (CHANGED_BY)
+        ) engine=INNODB;
+]]></sql>
+        <rollback>
+            <sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+        drop table entity_data_history;
+]]></sql> </rollback>
+    </changeSet>
+</databaseChangeLog>

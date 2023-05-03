@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+				   logicalFilePath="what_where_liquibase_path">
+	<changeSet id="2.1.3-X07-01.01.01" author="Mykola Chyslin">
+		<comment>Add search value for SETTLEMENT_AREA column</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `dwelling`
+			ADD SETTLEMENT_AREA_SEARCH VARCHAR(80) CHARSET UTF8 COLLATE utf8_unicode_ci
+			DEFAULT 'NONE' NOT NULL;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `dwelling` DROP COLUMN SETTLEMENT_AREA_SEARCH;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X07-01.01.02" author="Mykola Chyslin">
+		<comment>Initialize column SETTLEMENT_AREA_SEARCH of `dwelling` table with upper of DWELLING_AREA column value</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		UPDATE `dwelling`
+		SET SETTLEMENT_AREA_SEARCH = UPPER(SETTLEMENT_AREA);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			SELECT CURRENT_TIMESTAMP() AS CURR_TIME FROM DUAL;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X07-01.02" author="Mykola Chyslin">
+		<comment>Add check constraint on SETTLEMENT_AREA_SEARCH column of the `dwelling` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `dwelling` ADD CONSTRAINT `dwelling_settlement_area_search_upper` CHECK(SETTLEMENT_AREA_SEARCH = UPPER(SETTLEMENT_AREA_SEARCH));
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `dwelling` DROP CONSTRAINT `dwelling_settlement_area_search_upper`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X07-01.03" author="Mykola Chyslin">
+		<comment>Add identity index to `dwelling` table</comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `dwelling`
+				ADD
+				UNIQUE INDEX `dwelling_identity_idx` (SETTLEMENT_ID, SETTLEMENT_AREA_SEARCH, KIND, LOCATION_ID);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `dwelling`
+				DROP INDEX `dwelling_identity_idx`;
+]]></sql>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

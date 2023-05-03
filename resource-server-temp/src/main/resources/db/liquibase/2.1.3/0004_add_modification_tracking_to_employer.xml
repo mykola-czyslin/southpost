@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+				   logicalFilePath="what_where_liquibase_path">
+	<changeSet id="2.1.3-X06-01.01" author="Mykola Chyslin">
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer`
+			ADD COLUMN
+				MODIFICATION_TIME
+					DATETIME NULL;
+
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer` DROP COLUMN MODIFICATION_TIME;
+
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X06-01.02" author="Mykola Chyslin">
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer`
+			ADD COLUMN
+				MODIFIED_BY_USER_ID BIGINT UNSIGNED NULL;
+
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer` DROP COLUMN MODIFICATION_TIME;
+
+			ALTER TABLE `employer` DROP COLUMN MODIFIED_BY_USER_ID;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X06-02" author="Mykola Chyslin">
+		<comment>
+			<![CDATA[Setting initial values to clinic modification tracking: assign modified by to 'internal' user (i.e. me)]]></comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		UPDATE `employer`
+			SET MODIFIED_BY_USER_ID = 1,
+				MODIFICATION_TIME = CURRENT_TIMESTAMP()
+		WHERE MODIFIED_BY_USER_ID IS NULL;
+
+		ALTER TABLE `employer` MODIFY COLUMN MODIFICATION_TIME DATETIME NOT NULL;
+
+		ALTER TABLE `employer` MODIFY COLUMN MODIFIED_BY_USER_ID BIGINT UNSIGNED NOT NULL;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer` MODIFY COLUMN MODIFICATION_TIME DATETIME NULL;
+
+		ALTER TABLE `employer` MODIFY COLUMN MODIFIED_BY_USER_ID BIGINT NOT NULL;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X06-03"
+			   author="Mykola Chyslin">
+		<comment><![CDATA[add indexes on MODIFIED_BY_USER_ID column]]></comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer` ADD INDEX `employer_modified_by_user_fi` (MODIFIED_BY_USER_ID) USING BTREE;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer` DROP INDEX `employer_modified_by_user_fi`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X06-04"
+			   author="Mykola Chyslin">
+		<comment><![CDATA[add indexes on MODIFICATION_TIME column]]></comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer` ADD INDEX `employer_modification_time` (MODIFICATION_TIME) USING HASH;
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer` DROP INDEX `employer_modification_time`;
+]]></sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2.1.3-X06-05"
+			   author="Mykola Chyslin">
+		<comment><![CDATA[add referential constraint on MODIFIED_BY_USER_ID column]]></comment>
+		<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+		ALTER TABLE `employer` ADD
+			CONSTRAINT `employer_modified_by_user_f` FOREIGN KEY (MODIFIED_BY_USER_ID)
+		 REFERENCES `user`(ID);
+]]></sql>
+		<rollback>
+			<sql dbms="mysql" stripComments="true" splitStatements="true" endDelimiter=";"><![CDATA[
+			ALTER TABLE `employer` DROP
+		 		CONSTRAINT `employer_modified_by_user_f`;
+]]></sql>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

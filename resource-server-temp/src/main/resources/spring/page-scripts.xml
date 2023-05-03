@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018. Mykola Chyslin personal development.
+  ~ All rights reserved
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<util:list id="vacancyFormScripts" value-type="java.lang.String">
+		<value>settlement/form</value>
+		<value>street/form</value>
+		<value>location/form</value>
+		<value>employer/form</value>
+		<value>contact/form</value>
+		<value>vacancy/form</value>
+		<value>vacancy/manage</value>
+	</util:list>
+
+	<util:list id="vacancyViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="vacancyListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>vacancy/list</value>
+	</util:list>
+
+	<util:list id="dwellingFormScripts" value-type="java.lang.String">
+		<value>contact/form</value>
+		<value>street/form</value>
+		<value>location/form</value>
+		<value>settlement/form</value>
+		<value>dwelling/form</value>
+	</util:list>
+
+	<util:list id="dwellingListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>dwelling/list</value>
+	</util:list>
+
+	<util:list id="dwellingViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="settlementListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>settlement/list</value>
+	</util:list>
+	<util:list id="settlementFormScripts" value-type="java.lang.String">
+		<value>settlement/form</value>
+		<value>settlement/manage</value>
+	</util:list>
+	<util:list id="settlementViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="streetsListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>street/list</value>
+	</util:list>
+
+	<util:list id="streetsFormScripts" value-type="java.lang.String">
+		<value>settlement/form</value>
+		<value>street/form</value>
+		<value>street/manage</value>
+	</util:list>
+
+	<util:list id="streetsViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="locationListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>location/list</value>
+	</util:list>
+
+	<util:list id="locationViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="locationFormScripts" value-type="java.lang.String">
+		<value>settlement/form</value>
+		<value>street/form</value>
+		<value>location/form</value>
+		<value>location/manage</value>
+	</util:list>
+
+	<util:list id="contactListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>contact/list</value>
+	</util:list>
+
+	<util:list id="contactViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="contactFormScripts" value-type="java.lang.String">
+		<value>settlement/form</value>
+		<value>street/form</value>
+		<value>location/form</value>
+		<value>contact/form</value>
+		<value>contact/manage</value>
+	</util:list>
+
+	<util:list id="employerFormScripts" value-type="java.lang.String">
+		<value>settlement/form</value>
+		<value>street/form</value>
+		<value>location/form</value>
+		<value>employer/form</value>
+		<value>contact/form</value>
+		<value>employer/form</value>
+		<value>employer/manage</value>
+	</util:list>
+
+	<util:list id="employerViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="employerListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>employer/list</value>
+	</util:list>
+
+	<util:list id="phoneListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>contact/phone/list</value>
+	</util:list>
+
+	<util:list id="phoneFormScripts" value-type="java.lang.String">
+		<value>contact/phone/manage</value>
+	</util:list>
+
+	<util:list id="phoneViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="emailListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>contact/email/list</value>
+	</util:list>
+
+	<util:list id="emailFormScripts" value-type="java.lang.String">
+		<value>contact/email/manage</value>
+	</util:list>
+
+	<util:list id="emailViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="userListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>user/list</value>
+		<value>mail</value>
+	</util:list>
+
+	<util:list id="clinicFormScripts" value-type="java.lang.String">
+		<value>contact/form</value>
+		<value>street/form</value>
+		<value>location/form</value>
+		<value>settlement/form</value>
+		<value>clinic/form</value>
+	</util:list>
+
+	<util:list id="clinicViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="clinicListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>clinic/list</value>
+	</util:list>
+
+	<util:list id="lawyerFormScripts" value-type="java.lang.String">
+		<value>contact/form</value>
+		<value>street/form</value>
+		<value>location/form</value>
+		<value>settlement/form</value>
+		<value>lawyer/form</value>
+	</util:list>
+
+	<util:list id="lawyerViewScripts" value-type="java.lang.String">
+		<value>common/view</value>
+	</util:list>
+
+	<util:list id="lawyerListScripts" value-type="java.lang.String">
+		<value>paged-list</value>
+		<value>lawyer/list</value>
+	</util:list>
+</beans>

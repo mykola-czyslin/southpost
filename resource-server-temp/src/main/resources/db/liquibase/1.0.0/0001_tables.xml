@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018. Mykola Chyslin personal development.
+  ~ All rights reserved
+  -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_liquibase_path">
+    <changeSet id="001_001" author="Mykola Chyslin">
+        <comment>user tables</comment>
+        <sqlFile path="sql/001_001_create_user_tables.sql"
+                 relativeToChangelogFile="true"
+                 dbms="mysql"
+                 encoding="UTF-8"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="sql/001_001_drop_user_tables.sql"
+                     relativeToChangelogFile="true"
+                     dbms="mysql"
+                     encoding="UTF-8"
+                     endDelimiter=";"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="001_002" author="Mykola_Chyslin">
+        <comment>address tables</comment>
+        <sqlFile path="sql/001_002_create_address_tables.sql"
+                 relativeToChangelogFile="true"
+                 dbms="mysql"
+                 encoding="UTF-8"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="sql/001_002_drop_address_tables.sql"
+                     relativeToChangelogFile="true"
+                     dbms="mysql"
+                     encoding="UTF-8"
+                     endDelimiter=";"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="001_003" author="Mykola_Chyslin">
+        <comment>contacts tables</comment>
+        <sqlFile path="sql/001_003_create_contact_tables.sql"
+                 relativeToChangelogFile="true"
+                 dbms="mysql"
+                 encoding="UTF-8"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="sql/001_003_drop_contact_tables.sql"
+                     relativeToChangelogFile="true"
+                     dbms="mysql"
+                     encoding="UTF-8"
+                     endDelimiter=";"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="001_004" author="Mykola_Chyslin">
+        <comment>employment tables</comment>
+        <sqlFile path="sql/001_004_create_employment_tables.sql"
+                 relativeToChangelogFile="true"
+                 dbms="mysql"
+                 encoding="UTF-8"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="sql/001_004_drop_employment_tables.sql"
+                     relativeToChangelogFile="true"
+                     dbms="mysql"
+                     encoding="UTF-8"
+                     endDelimiter=";"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

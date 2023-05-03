@@ -1,0 +1,9 @@
+INSERT INTO user(ID, LOGIN, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, REGISTERED_AT)
+VALUES (1, 'olichka', 'olganotyk@gmail.com', '$2a$11$ji6EG1P7qbVMly0nb.WaQ.spMrHmQYUN75DkVS/4CD6cqMjWElurS', 'Ольга', 'Нотик', CURRENT_TIMESTAMP());
+
+INSERT INTO user_role(USER_ID, ROLE_NAME)
+VALUES
+  (1, 'VIEWER'),
+  (1, 'OPERATOR'),
+  (1, 'ADMINISTRATOR'),
+  (1, 'SUPERVISOR');

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018. Mykola Chyslin personal development. 
+  ~ All rights reserved
+  -->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="what_where_liquibase_path">
+
+    <changeSet id="0001.0001_enable_internal_user_separation" author="Mykola Chyslin">
+        <comment>Add field that allow distinguish internal users</comment>
+        <sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+        ALTER TABLE user ADD INTERNAL_USER BOOLEAN DEFAULT 0 NOT NULL;
+]]></sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0001.0002_INIT_SUPERVISOR_AS_INTERNAL" author="Mykola Chyslin">
+        <comment>Mark supervisor user as internal</comment>
+        <sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+        UPDATE user SET INTERNAL_USER = 1 WHERE ID = 1;
+]]></sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0001.0003_add_mes_internal_user" author="Mykola Chyslin">
+        <comment>Add myself as internal user</comment>
+        <sql dbms="mysql" endDelimiter=";" splitStatements="true" stripComments="true"><![CDATA[
+INSERT INTO user(LOGIN, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, REGISTERED_AT, INTERNAL_USER)
+VALUES ('internal', 'mchyslin@gmail.com', '$2a$11$TWAoz/eNJhlcPZjHXPsXauTuXbPWXt4SDKsdeZb72j1rRrKbm6Nvy', 'Микола', 'Числін', CURRENT_TIMESTAMP(), 1);
+
+INSERT INTO user_role(USER_ID, ROLE_NAME)
+VALUES
+  ((select id from user where login = 'internal'), 'VIEWER'),
+  ((select id from user where login = 'internal'), 'OPERATOR'),
+  ((select id from user where login = 'internal'), 'ADMINISTRATOR'),
+  ((select id from user where login = 'internal'), 'SUPERVISOR');]]></sql>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>
